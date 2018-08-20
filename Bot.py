@@ -26,6 +26,11 @@ class TextGenerator:
         while sentence is None:
             sentence = self.textModel.make_sentence(tries=100)
         return sentence
+    def generate_short(self, limit = 140):
+        sentence = None
+        while sentence is None:
+            sentence = self.textModel.make_short_sentence(max_chars=limit, tries=100)
+        return sentence
 
 
 class KeepBot(Client):
