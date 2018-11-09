@@ -69,16 +69,33 @@ textGen = TextGenerator()
 textGen.initMarkovChain(cache)
 
 status = api.PostUpdate(hashtagify(textGen.generate_short(), nb_hashtag=1, capital_hashtag=True))
+
+doublon = set()
+size = len(doublon)
 while status:
     time.sleep(15*30)
     trend = getTrendText()
     print(trend)
     trendGen = TextGenerator()
     trendGen.initMarkovChain(cache + "\n" + trend)
-    status = api.PostUpdate(hashtagify(trendGen.generate_short(), capital_hashtag=False))
+    size = len(doublon)
+    tmp = size + 1
+    short = ""
+    while size != tmp:
+        short = hashtagify(trendGen.generate_short(), capital_hashtag=False)
+        doublon.add(short)
+        size = len(doublon)
+    status = api.PostUpdate(short)
     print("twit")
     time.sleep(15*30)
-    status = api.PostUpdate(hashtagify(textGen.generate_short(), nb_hashtag=2, capital_hashtag=True))
+    size = doublon.length
+    tmp = size - 1
+    short = ""
+    while size != tmp:
+        short = hashtagify(textGen.generate_short(), capital_hashtag=False)
+        doublon.add(short)
+        size = len(doublon)
+    status = api.PostUpdate(short)
     print("twit")
     print("twit")
 
